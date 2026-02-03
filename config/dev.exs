@@ -69,7 +69,9 @@ config :record_verifier, RecordVerifierWeb.Endpoint,
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :record_verifier, dev_routes: true
+config :record_verifier,
+  dev_routes: true,
+  token_signing_secret: "wHvrkjhkL0IlSsN+gCB5DxGIEsh3vivJ"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"

@@ -15,7 +15,8 @@ defmodule RecordVerifier.Application do
       # Start a worker by calling: RecordVerifier.Worker.start_link(arg)
       # {RecordVerifier.Worker, arg},
       # Start to serve requests, typically the last entry
-      RecordVerifierWeb.Endpoint
+      RecordVerifierWeb.Endpoint,
+      {AshAuthentication.Supervisor, [otp_app: :record_verifier]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

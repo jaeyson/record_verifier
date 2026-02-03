@@ -25,6 +25,9 @@ config :spark,
     remove_parens?: true,
     "Ash.Resource": [
       section_order: [
+        :authentication,
+        :token,
+        :user_identity,
         :postgres,
         :resource,
         :code_interface,
@@ -47,7 +50,8 @@ config :spark,
 
 config :record_verifier,
   ecto_repos: [RecordVerifier.Repo],
-  generators: [timestamp_type: :utc_datetime, binary_id: true]
+  generators: [timestamp_type: :utc_datetime, binary_id: true],
+  ash_domains: [RecordVerifier.Accounts]
 
 # Configure the endpoint
 config :record_verifier, RecordVerifierWeb.Endpoint,
