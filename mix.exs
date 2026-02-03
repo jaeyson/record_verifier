@@ -41,6 +41,7 @@ defmodule RecordVerifier.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:ash_postgres, "~> 2.0"},
       {:ash_phoenix, "~> 2.0"},
       {:sourceror, "~> 1.8", only: [:dev, :test]},
       {:ash, "~> 3.0"},
@@ -81,10 +82,10 @@ defmodule RecordVerifier.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ash.setup", "assets.setup", "assets.build", "run priv/repo/seeds.exs"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      test: ["ash.setup --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["compile", "tailwind record_verifier", "esbuild record_verifier"],
       "assets.deploy": [
