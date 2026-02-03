@@ -121,14 +121,4 @@ defmodule RecordVerifierWeb.Router do
       error_tracker_dashboard "/errors"
     end
   end
-
-  if Application.compile_env(:record_verifier, :dev_routes) do
-    use ErrorTracker.Web, :router
-
-    scope "/dev" do
-      pipe_through :browser
-
-      error_tracker_dashboard "/errors"
-    end
-  end
 end
