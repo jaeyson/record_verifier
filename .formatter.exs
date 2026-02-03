@@ -1,5 +1,6 @@
 [
   import_deps: [
+    :error_tracker,
     :ash_admin,
     :ash_authentication_phoenix,
     :ash_authentication,

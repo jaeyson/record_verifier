@@ -41,6 +41,7 @@ defmodule RecordVerifier.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:error_tracker, "~> 0.7"},
       {:live_debugger, "~> 0.5", only: [:dev]},
       {:ash_admin, "~> 0.13"},
       {:ash_authentication_phoenix, "~> 2.0"},
