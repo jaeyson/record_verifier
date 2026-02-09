@@ -1,4 +1,7 @@
 import Config
+config :record_verifier, token_signing_secret: "/7o5wCiy2u+GDCLmGl+mALGUbMgmIRuH"
+config :bcrypt_elixir, log_rounds: 1
+config :ash, policies: [show_policy_breakdowns?: true], disable_async?: true
 
 # Configure your database
 #
