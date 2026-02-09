@@ -1,7 +1,21 @@
 defmodule RecordVerifierWeb.PageController do
+  alias RecordVerifier.CheckDuplicate
   use RecordVerifierWeb, :controller
 
   def home(conn, _params) do
     render(conn, :home)
+  end
+
+  def verify(conn, %{"_json" => beneficiaries} = params) do
+    dbg(params)
+
+    payload =
+      beneficiaries
+      |> Enum.map(&CheckDuplicate.segregate_records/1)
+      |> Enum.frequencies()
+
+    conn
+    |> put_status(:created)
+    |> json(payload)
   end
 end

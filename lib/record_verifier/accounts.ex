@@ -8,5 +8,9 @@ defmodule RecordVerifier.Accounts do
   resources do
     resource RecordVerifier.Accounts.Token
     resource RecordVerifier.Accounts.User
+
+    resource RecordVerifier.Accounts.Beneficiary do
+      define :create_beneficiary, action: :create
+    end
   end
 end

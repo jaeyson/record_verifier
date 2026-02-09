@@ -19,6 +19,13 @@ defmodule RecordVerifierWeb.Router do
     plug :accepts, ["json"]
     plug :load_from_bearer
     plug :set_actor, :user
+    plug RecordVerifierWeb.Plugs.CheckAuthToken
+  end
+
+  scope "/", RecordVerifierWeb do
+    pipe_through :api
+
+    post "/verify", PageController, :verify
   end
 
   scope "/", RecordVerifierWeb do
