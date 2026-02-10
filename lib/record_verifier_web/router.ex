@@ -42,6 +42,7 @@ defmodule RecordVerifierWeb.Router do
       #
       # If an authenticated user must *not* be present:
       # on_mount {RecordVerifierWeb.LiveUserAuth, :live_no_user}
+      live "/beneficiaries", Beneficiaries.IndexLive
     end
   end
 

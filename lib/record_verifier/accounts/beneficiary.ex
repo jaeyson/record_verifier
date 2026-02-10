@@ -11,12 +11,38 @@ defmodule RecordVerifier.Accounts.Beneficiary do
   end
 
   actions do
-    defaults [:read, :update, :destroy]
+    defaults [:read, :destroy]
 
     create :create do
       accept [
         :committer,
         :spread_sheet_id,
+        :first_name,
+        :middle_name,
+        :last_name,
+        :birth_date,
+        :barangay,
+        :city_or_municipality,
+        :province,
+        :district,
+        :id_type,
+        :id_number,
+        :place_of_issue,
+        :contact_number,
+        :beneficiary_type,
+        :occupation,
+        :sex,
+        :civil_status,
+        :age,
+        :monthly_income,
+        :dependent,
+        :interested,
+        :skills_needed
+      ]
+    end
+
+    update :update do
+      accept [
         :first_name,
         :middle_name,
         :last_name,
@@ -159,9 +185,6 @@ defmodule RecordVerifier.Accounts.Beneficiary do
   end
 
   identities do
-    # identity :unique_id_number_per_beneficiary, [:id_number],
-    #   message: "already exists for this beneficiary"
-
     identity :unique_spread_sheet_id_per_beneficiary, [:spread_sheet_id],
       message: "Unique spread sheet ID already exists for this beneficiary"
 

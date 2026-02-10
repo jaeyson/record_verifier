@@ -54,7 +54,7 @@ defmodule RecordVerifier.CheckDuplicate do
       {:error, _} ->
         :server_error
 
-      {:ok, %Accounts.Beneficiary{spread_sheet_id: spread_sheet_id}} ->
+      {:ok, %Accounts.Beneficiary{spread_sheet_id: ^spread_sheet_id}} ->
         :ok
     end
   end

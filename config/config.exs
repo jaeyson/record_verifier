@@ -7,6 +7,7 @@
 # General application configuration
 import Config
 
+config :cinder, default_theme: "modern"
 config :ex_cldr, default_backend: RecordVerifier.Cldr
 config :error_tracker, repo: RecordVerifier.Repo, otp_app: :record_verifier, enabled: true
 
