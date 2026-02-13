@@ -31,19 +31,30 @@ defmodule RecordVerifierWeb.Router do
   scope "/", RecordVerifierWeb do
     pipe_through :browser
 
-    ash_authentication_live_session :authenticated_routes do
-      # in each liveview, add one of the following at the top of the module:
-      #
-      # If an authenticated user must be present:
-      # on_mount {RecordVerifierWeb.LiveUserAuth, :live_user_required}
-      #
-      # If an authenticated user *may* be present:
-      # on_mount {RecordVerifierWeb.LiveUserAuth, :live_user_optional}
-      #
-      # If an authenticated user must *not* be present:
-      # on_mount {RecordVerifierWeb.LiveUserAuth, :live_no_user}
-      live "/beneficiaries", Beneficiaries.IndexLive
+    ash_authentication_live_session :auth_optional,
+      # on_mount: {NappyWeb.LiveUserAuth, :live_user_required} do
+      on_mount: {RecordVerifierWeb.LiveUserAuth, :live_user_optional} do
+      live "/list", Beneficiaries.IndexLive
+      live "/beneficiaries", BeneficiaryLive.Index, :index
+      live "/beneficiaries/new", BeneficiaryLive.Form, :new
+      live "/beneficiaries/:id/edit", BeneficiaryLive.Form, :edit
+
+      live "/beneficiaries/:id", BeneficiaryLive.Show, :show
+      live "/beneficiaries/:id/show/edit", BeneficiaryLive.Show, :edit
     end
+
+    # ash_authentication_live_session :authenticated_routes do
+    #   # in each liveview, add one of the following at the top of the module:
+    #   #
+    #   # If an authenticated user must be present:
+    #   # on_mount {RecordVerifierWeb.LiveUserAuth, :live_user_required}
+    #   #
+    #   # If an authenticated user *may* be present:
+    #   # on_mount {RecordVerifierWeb.LiveUserAuth, :live_user_optional}
+    #   #
+    #   # If an authenticated user must *not* be present:
+    #   # on_mount {RecordVerifierWeb.LiveUserAuth, :live_no_user}
+    # end
   end
 
   scope "/", RecordVerifierWeb do

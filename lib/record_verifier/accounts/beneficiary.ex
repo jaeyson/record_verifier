@@ -5,6 +5,8 @@ defmodule RecordVerifier.Accounts.Beneficiary do
     authorizers: [Ash.Policy.Authorizer],
     data_layer: AshPostgres.DataLayer
 
+  alias RecordVerifier.Enums
+
   postgres do
     table "beneficiaries"
     repo RecordVerifier.Repo
@@ -39,6 +41,8 @@ defmodule RecordVerifier.Accounts.Beneficiary do
         :interested,
         :skills_needed
       ]
+
+      change RecordVerifier.Accounts.Changes.CapitalizeString
     end
 
     update :update do
@@ -65,10 +69,16 @@ defmodule RecordVerifier.Accounts.Beneficiary do
         :interested,
         :skills_needed
       ]
+
+      change RecordVerifier.Accounts.Changes.CapitalizeString
     end
   end
 
   policies do
+    # bypass actor_attribute_equals(:role, :admin) do
+    #   authorize_if always()
+    # end
+
     policy action_type(:read) do
       authorize_if always()
     end
@@ -76,6 +86,10 @@ defmodule RecordVerifier.Accounts.Beneficiary do
     policy action_type(:create) do
       authorize_if always()
     end
+
+    # policy action_type([:update, :destroy]) do
+    #   authorize_if expr(can_manage_album?)
+    # end
 
     policy action_type(:update) do
       authorize_if always()
@@ -113,11 +127,11 @@ defmodule RecordVerifier.Accounts.Beneficiary do
       description "Birth date (DD/MM/YYYY)"
     end
 
-    attribute :barangay, :string do
+    attribute :barangay, Enums.Barangay do
       allow_nil? false
     end
 
-    attribute :city_or_municipality, :string do
+    attribute :city_or_municipality, Enums.CityOrMunicipality do
       allow_nil? false
     end
 
@@ -129,7 +143,7 @@ defmodule RecordVerifier.Accounts.Beneficiary do
       allow_nil? false
     end
 
-    attribute :id_type, :string do
+    attribute :id_type, Enums.IdType do
       allow_nil? false
     end
 
@@ -145,19 +159,19 @@ defmodule RecordVerifier.Accounts.Beneficiary do
       allow_nil? false
     end
 
-    attribute :beneficiary_type, :string do
+    attribute :beneficiary_type, Enums.BeneficiaryType do
       allow_nil? false
     end
 
-    attribute :occupation, :string do
+    attribute :occupation, Enums.Occupation do
       allow_nil? false
     end
 
-    attribute :sex, RecordVerifier.Accounts.Gender do
+    attribute :sex, Enums.Sex do
       allow_nil? false
     end
 
-    attribute :civil_status, RecordVerifier.Accounts.CivilStatus do
+    attribute :civil_status, Enums.CivilStatus do
       allow_nil? false
     end
 
@@ -183,6 +197,17 @@ defmodule RecordVerifier.Accounts.Beneficiary do
 
     timestamps()
   end
+
+  # calculations do
+  #   calculate :duration, :string, Tunez.Music.Calculations.SecondsToMinutes
+
+  #   calculate :can_manage_album?,
+  #             :boolean,
+  #             expr(
+  #               ^actor(:role) == :admin or
+  #                 (^actor(:role) == :editor and created_by_id == ^actor(:id))
+  #             )
+  # end
 
   identities do
     identity :unique_spread_sheet_id_per_beneficiary, [:spread_sheet_id],

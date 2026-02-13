@@ -1,5 +1,6 @@
 defmodule RecordVerifier.Cldr do
   use Cldr,
-    locales: ["en"],
-    default_locale: "en"
+    locales: ["en-PH", "fil-PH"],
+    default_locale: "en-PH",
+    providers: [Cldr.Number, Money]
 end

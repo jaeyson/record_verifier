@@ -7,8 +7,6 @@ defmodule RecordVerifierWeb.PageController do
   end
 
   def verify(conn, %{"_json" => beneficiaries} = params) do
-    dbg(params)
-
     payload =
       beneficiaries
       |> Enum.map(&CheckDuplicate.segregate_records/1)

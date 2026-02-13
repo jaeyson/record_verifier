@@ -36,6 +36,12 @@ const liveSocket = new LiveSocket("/live", Socket, {
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+window.addEventListener("phx:open-daisy-modal", (e) => {
+  const modal = document.getElementById(e.detail.id);
+  if (modal) {
+    modal.showModal();
+  }
+});
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
