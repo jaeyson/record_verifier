@@ -41,6 +41,10 @@ defmodule RecordVerifier.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:cinder, "~> 0.9"},
+      {:ex_money_sql, "~> 1.0"},
+      {:ex_cldr, "~> 2.0"},
+      {:ash_money, "~> 0.2"},
       {:bcrypt_elixir, "~> 3.0"},
       {:error_tracker, "~> 0.7"},
       {:live_debugger, "~> 0.5", only: [:dev]},

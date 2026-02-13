@@ -20,6 +20,8 @@ if System.get_env("PHX_SERVER") do
   config :record_verifier, RecordVerifierWeb.Endpoint, server: true
 end
 
+config :record_verifier, :runtime, x_auth_token: System.get_env("X_AUTH_TOKEN")
+
 config :record_verifier, RecordVerifierWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 

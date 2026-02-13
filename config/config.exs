@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :cinder, default_theme: "modern"
+config :ex_cldr, default_backend: RecordVerifier.Cldr
 config :error_tracker, repo: RecordVerifier.Repo, otp_app: :record_verifier, enabled: true
 
 config :ash,
@@ -20,7 +22,8 @@ config :ash,
   read_action_after_action_hooks_in_order?: true,
   bulk_actions_default_to_errors?: true,
   transaction_rollback_on_error?: true,
-  known_types: [AshPostgres.Timestamptz, AshPostgres.TimestamptzUsec]
+  known_types: [AshPostgres.Timestamptz, AshPostgres.TimestamptzUsec, AshMoney.Types.Money],
+  custom_types: [money: AshMoney.Types.Money]
 
 config :spark,
   formatter: [
