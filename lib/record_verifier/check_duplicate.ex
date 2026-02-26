@@ -33,7 +33,8 @@ defmodule RecordVerifier.CheckDuplicate do
       sex: String.capitalize(beneficiary["Sex"]),
       civil_status: String.capitalize(beneficiary["Civil status"]),
       age: beneficiary["Age"],
-      monthly_income: Money.new("PHP", beneficiary["Ave Monthly Income"]),
+      monthly_income:
+        Money.new("PHP", String.replace(beneficiary["Ave Monthly Income"], ~r/[^\d.]/, "")),
       dependent: beneficiary["Dependent"],
       interested:
         yes_no_to_boolean(beneficiary["Interested in wage employment or self-employment?"]),
@@ -41,18 +42,30 @@ defmodule RecordVerifier.CheckDuplicate do
     }
 
     case Accounts.create_beneficiary(params) do
-      {:error,
-       %Ash.Error.Invalid{
-         errors: [
-           %Ash.Error.Changes.InvalidAttribute{
-             message: "Unique spread sheet ID already exists for this beneficiary"
-           }
-         ]
-       }} ->
-        :error
+      {:error, %Ash.Error.Invalid{errors: errors}} ->
+        unique_error = Enum.find(errors, fn
+      %Ash.Error.Changes.InvalidAttribute{field: :spread_sheet_id, private_vars: vars} ->
+        vars[:constraint_type] == :unique
+      _ -> false
+    end)
 
-      {:error, _} ->
-        :server_error
+    if unique_error do
+      detail = unique_error.private_vars[:detail]
+      
+      spread_sheet_id = 
+        case Regex.run(~r/\)=\((.*)\)/, detail) do
+          [_, id] -> id
+          _ -> nil
+        end
+
+      %{duplicate: spread_sheet_id}
+    else
+      :error
+    end
+
+      # {:error, reason} ->
+      #   dbg(reason)
+      #   :server_error
 
       {:ok, %Accounts.Beneficiary{spread_sheet_id: ^spread_sheet_id}} ->
         :ok

@@ -180,7 +180,7 @@ defmodule RecordVerifierWeb.Beneficiaries.IndexLive do
         </div>
       </dialog>
       <div class="container mx-auto">
-        <.button variant="primary" navigate={~p"/beneficiaries/new"}>
+        <.button variant="primary" class="btn btn-accent" navigate={~p"/beneficiaries/new"}>
           <.icon name="hero-plus" /> New Beneficiary
         </.button>
       </div>

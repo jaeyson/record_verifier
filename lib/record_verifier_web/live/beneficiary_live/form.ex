@@ -31,31 +31,61 @@ defmodule RecordVerifierWeb.BeneficiaryLive.Form do
             field={@form[:birth_date]}
             type="date"
             label="Birth date"
-          /><.input field={@form[:barangay]} type="select" label="Barangay" /><.input
+          />
+          <.input
+            field={@form[:barangay]}
+            type="select"
+            label="Barangay"
+            prompt="Select Barangay"
+            options={RecordVerifier.Enums.Barangay.values()}
+          />
+          <.input
             field={@form[:city_or_municipality]}
-            type="text"
+            type="select"
             label="City or municipality"
-          /><.input field={@form[:province]} type="text" label="Province" /><.input
+            options={RecordVerifier.Enums.CityOrMunicipality.values()}
+          />
+          <.input field={@form[:province]} type="text" label="Province" /><.input
             field={@form[:district]}
             type="text"
             label="District"
-          /><.input field={@form[:id_type]} type="text" label="Id type" /><.input
-            field={@form[:id_number]}
-            type="text"
-            label="Id number"
-          /><.input field={@form[:place_of_issue]} type="text" label="Place of issue" /><.input
+          />
+          <.input
+            field={@form[:id_type]}
+            type="select"
+            label="Id type"
+            options={RecordVerifier.Enums.IdType.values()}
+          />
+          <.input field={@form[:place_of_issue]} type="text" label="Place of issue" /><.input
             field={@form[:contact_number]}
             type="text"
             label="Contact number"
-          /><.input field={@form[:beneficiary_type]} type="text" label="Beneficiary type" /><.input
+          />
+          <.input
+            field={@form[:beneficiary_type]}
+            type="select"
+            label="Beneficiary type"
+            options={RecordVerifier.Enums.BeneficiaryType.values()}
+          />
+          <.input
             field={@form[:occupation]}
-            type="text"
+            type="select"
             label="Occupation"
-          /><.input field={@form[:sex]} type="text" label="Sex" /><.input
+            options={RecordVerifier.Enums.Occupation.values()}
+          />
+          <.input
+            field={@form[:sex]}
+            type="select"
+            label="Sex"
+            options={RecordVerifier.Enums.Sex.values()}
+          />
+          <.input
             field={@form[:civil_status]}
             type="text"
             label="Civil status"
-          /><.input field={@form[:age]} type="number" label="Age" /><.input
+            options={RecordVerifier.Enums.CivilStatus.values()}
+          />
+          <.input field={@form[:age]} type="number" label="Age" /><.input
             field={@form[:monthly_income]}
             type="text"
             label="Monthly income"

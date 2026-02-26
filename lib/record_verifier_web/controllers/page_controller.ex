@@ -10,7 +10,7 @@ defmodule RecordVerifierWeb.PageController do
     payload =
       beneficiaries
       |> Enum.map(&CheckDuplicate.segregate_records/1)
-      |> Enum.frequencies()
+      |> IO.inspect(label: "map")
 
     conn
     |> put_status(:created)

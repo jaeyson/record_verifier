@@ -45,19 +45,36 @@ defmodule RecordVerifierWeb.Layouts do
       <div class="flex-none">
         <ul class="flex flex-column px-1 space-x-4 items-center">
           <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
+            <a href="https://phoenixframework.org/" class="btn btn-ghost">Dashboard</a>
           </li>
           <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
+            <a href="https://phoenixframework.org/" class="btn btn-ghost">Admin</a>
+          </li>
+          <li>
+            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">
+              Server errors
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">
+              Server dashboard
+            </a>
           </li>
           <li>
             <.theme_toggle />
           </li>
           <li>
+            <a href="https://hexdocs.pm/phoenix/overview.html" class="btn btn-accent">
+              Profile
+            </a>
+          </li>
+          <%!--
+          <li>
             <a href="https://hexdocs.pm/phoenix/overview.html" class="btn btn-primary">
               Get Started <span aria-hidden="true">&rarr;</span>
             </a>
           </li>
+          --%>
         </ul>
       </div>
     </header>
