@@ -24,12 +24,18 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/record_verifier"
 import topbar from "../vendor/topbar"
+import { Hooks as FluxonHooks, DOM as FluxonDOM } from 'fluxon'
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks},
+  hooks: {...FluxonHooks, ...colocatedHooks},
+  dom: { 
+    onBeforeElUpdated(from, to) { 
+      FluxonDOM.onBeforeElUpdated(from, to)
+    },
+  },
 })
 
 // Show progress bar on live navigation and form submits
@@ -39,7 +45,13 @@ window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 window.addEventListener("phx:open-daisy-modal", (e) => {
   const modal = document.getElementById(e.detail.id);
   if (modal) {
-    modal.showModal();
+    modal.showModal()
+  }
+});
+window.addEventListener("close-daisy-modal", (e) => {
+  const modal = document.getElementById("modal-beneficiaries");
+  if (modal) {
+    modal.close()
   }
 });
 

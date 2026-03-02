@@ -16,4 +16,10 @@ defmodule RecordVerifier.Accounts do
       define :change_beneficiary, action: :update
     end
   end
+
+  def total_beneficiaries do
+    RecordVerifier.Accounts.Beneficiary
+    |> Ash.Query.new()
+    |> Ash.count!()
+  end
 end

@@ -8,25 +8,29 @@
  * Go to: Project settings -> Script Properties
  * property name: X_AUTH_TOKEN
  * property value: <PUT YOUR X_AUTH_TOKEN VALUE HERE>
-/*
-function onOpen() {
-  const ui = SpreadsheetApp.getUi();
-  
-  // Create a custom menu in the top toolbar
-  ui.createMenu('🚀 Send to server')
-    .addItem('Send Data to Server', 'sendDataToTailscale')
-    .addSeparator()
-    .addItem('Check Server Status', 'checkStatus') // Optional extra button
-    .addToUi();
-}
-*/
+ */
 
-/*
-// Optional helper function to test the connection without sending a massive file
-function checkStatus() {
-  SpreadsheetApp.getUi().alert('Menu is working! Click "Send Data" to trigger the export.');
+/**
+ * Clears red highlights from the data rows.
+ */
+function clearHighlights() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const DATA_START_ROW = 8; // Define your data start row
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+  
+  // Only clear if there is actually data below or at the start row
+  if (lastRow >= DATA_START_ROW) {
+    // Calculate how many rows to clear: 
+    // If lastRow is 10 and start is 8, we need to clear 3 rows (8, 9, 10)
+    const numRowsToClear = lastRow - DATA_START_ROW + 1;
+    
+    sheet.getRange(DATA_START_ROW, 1, numRowsToClear, lastCol).setBackground(null);
+    SpreadsheetApp.getUi().alert("Highlights cleared from row 8 downwards!");
+  } else {
+    SpreadsheetApp.getUi().alert("No data rows found to clear.");
+  }
 }
-*/
 
 /**
  * Generates a NanoID-style string.
@@ -85,29 +89,21 @@ function getApiKey(propertyName) {
 }
 
 function sendToLocalTunnelServer() {
-  // 1. Define the Spreadsheet (the whole file)
   const spread_sheet = SpreadsheetApp.getActiveSpreadsheet();
-  
-  // 2. Define the Sheet (the specific tab)
   const active_sheet = spread_sheet.getActiveSheet(); 
-  
-  // 3. Get the Owner
   const committer = spread_sheet.getOwner().getEmail();
   
-  // Now you can use them!
-  // Logger.log("Committer: " + committer);
-  // Logger.log("Committed spreadsheet tab name: " + active_sheet.getName());
+  const HEADER_ROW = 7; 
+  const DATA_START_ROW = 8;
 
-  const allData = spread_sheet.getDataRange().getDisplayValues();
-  
-  // allData[0]; // button, not needed here
-  const headers = allData[1]; // header
-  const rows = allData.slice(2); // rest of data
+  const allData = active_sheet.getDataRange().getDisplayValues();
+  const headers = allData[HEADER_ROW - 1]; 
+  const rows = allData.slice(DATA_START_ROW - 1); 
 
   const jsonPayload = rows.map(row => {
     let obj = {};
     headers.forEach((header, index) => {
-      if (header !== "") {
+      if (header !== "" && header !== null) {
         obj[header] = row[index];
       }
     });
@@ -116,13 +112,10 @@ function sendToLocalTunnelServer() {
   });
 
   const url = "https://jaeysons-macbook-air.tail568508.ts.net/verify";
-
   const options = {
     method: "post",
     contentType: "application/json",
-    headers: {
-      "X-Auth-Token": getApiKey('X_AUTH_TOKEN')
-    },
+    headers: { "X-Auth-Token": getApiKey('X_AUTH_TOKEN') },
     payload: JSON.stringify(jsonPayload),
     muteHttpExceptions: true
   };
@@ -131,36 +124,62 @@ function sendToLocalTunnelServer() {
     const response = UrlFetchApp.fetch(url, options);
     const code = response.getResponseCode();
     const content = response.getContentText();
+    const result = JSON.parse(content); // This is the list from Elixir
 
-    let result = {};
+    // We use reduce to count and extract duplicate IDs in one pass
+    const stats = result.reduce((acc, item) => {
+      if (item === "ok") {
+        acc.okCount++;
+      } else if (item && typeof item === 'object' && item.duplicate) {
+        acc.duplicateCount++;
+        acc.duplicateIds.push(item.duplicate);
+      }
+      return acc;
+    }, { okCount: 0, duplicateCount: 0, duplicateIds: [] });
 
-    if (content && content.trim(). startsWith('{')) {
-      result = JSON.parse(content);
+    const lastRow = active_sheet.getLastRow();
+    const lastCol = active_sheet.getLastColumn();
+
+    if (lastRow >= DATA_START_ROW) {
+      // Clear previous highlights
+      active_sheet.getRange(DATA_START_ROW, 1, lastRow - (DATA_START_ROW - 1), lastCol).setBackground(null);
+
+      if (stats.duplicateIds.length > 0) {
+        const idRange = active_sheet.getRange(DATA_START_ROW, 1, lastRow - (DATA_START_ROW - 1), 1);
+        const idValues = idRange.getValues(); 
+
+        idValues.forEach((row, index) => {
+          if (stats.duplicateIds.includes(row[0])) {
+            active_sheet.getRange(index + DATA_START_ROW, 1, 1, lastCol).setBackground("#f4cccc");
+          }
+        });
+      }
     }
 
-    const { ok, server_error } = result;
-
-    Logger.log('server error: ' + server_error); // server-related or undefined
-    Logger.log('ok: ' + ok);    // 9 (or undefined if missing)
+    // This forces the script to "paint" the spreadsheet before showing the alert
+    SpreadsheetApp.flush();
 
     switch (code) {
-      case 200:
-        SpreadsheetApp.getUi().alert("💡 0 Beneficiaries added to server");
-        break;
       case 201:
-        SpreadsheetApp.getUi().alert(`✅ duplicates: ${0 || 0}, non-dup: ${ok || 0}, server error: ${server_error || 0}`);
+      case 200:
+        SpreadsheetApp.getUi().alert(
+          `✅ Processing Complete\n\n` +
+          `• Success: ${stats.okCount}\n` +
+          `• Duplicates Found: ${stats.duplicateCount} (red background)`
+        );
         break;
       case 403:
-        SpreadsheetApp.getUi().alert("❌ ✋🏽 Forbidden: needs token access");
+        SpreadsheetApp.getUi().alert("❌ Forbidden: Token access required");
         break;
       case 500:
         SpreadsheetApp.getUi().alert("❌ 🖥️ Server related error");
         break;
       default:
-        SpreadsheetApp.getUi().alert("❌ 🛜 Error: Failed to send data. Check server error logs");
+        SpreadsheetApp.getUi().alert(`Response Code: ${code}. Check highlights.`);
     }
+
   } catch (e) {
     Logger.log("Error: " + e.toString());
-    SpreadsheetApp.getUi().alert("❌ Error: Failed to send data. Check Logs.");
+    SpreadsheetApp.getUi().alert("❌ Error: " + e.message);
   }
 }

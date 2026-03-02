@@ -34,8 +34,9 @@ defmodule RecordVerifierWeb.Router do
     ash_authentication_live_session :auth_optional,
       # on_mount: {NappyWeb.LiveUserAuth, :live_user_required} do
       on_mount: {RecordVerifierWeb.LiveUserAuth, :live_user_optional} do
+      live "/beneficiaries", InvoiceManagementLive.Index, :index
       live "/list", Beneficiaries.IndexLive
-      live "/beneficiaries", BeneficiaryLive.Index, :index
+      # live "/beneficiaries", BeneficiaryLive.Index, :index
       live "/beneficiaries/new", BeneficiaryLive.Form, :new
       live "/beneficiaries/:id/edit", BeneficiaryLive.Form, :edit
 

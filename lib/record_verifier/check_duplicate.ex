@@ -43,29 +43,31 @@ defmodule RecordVerifier.CheckDuplicate do
 
     case Accounts.create_beneficiary(params) do
       {:error, %Ash.Error.Invalid{errors: errors}} ->
-        unique_error = Enum.find(errors, fn
-      %Ash.Error.Changes.InvalidAttribute{field: :spread_sheet_id, private_vars: vars} ->
-        vars[:constraint_type] == :unique
-      _ -> false
-    end)
+        unique_error =
+          Enum.find(errors, fn
+            %Ash.Error.Changes.InvalidAttribute{field: :spread_sheet_id, private_vars: vars} ->
+              vars[:constraint_type] == :unique
 
-    if unique_error do
-      detail = unique_error.private_vars[:detail]
-      
-      spread_sheet_id = 
-        case Regex.run(~r/\)=\((.*)\)/, detail) do
-          [_, id] -> id
-          _ -> nil
+            _ ->
+              false
+          end)
+
+        if unique_error do
+          detail = unique_error.private_vars[:detail]
+
+          spread_sheet_id =
+            case Regex.run(~r/\)=\((.*)\)/, detail) do
+              [_, id] -> id
+              _ -> nil
+            end
+
+          %{duplicate: spread_sheet_id}
+        else
+          :error
         end
 
-      %{duplicate: spread_sheet_id}
-    else
-      :error
-    end
-
-      # {:error, reason} ->
-      #   dbg(reason)
-      #   :server_error
+      {:error, reason} ->
+        :server_error
 
       {:ok, %Accounts.Beneficiary{spread_sheet_id: ^spread_sheet_id}} ->
         :ok

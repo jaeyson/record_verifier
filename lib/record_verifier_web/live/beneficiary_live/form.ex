@@ -1,7 +1,7 @@
 defmodule RecordVerifierWeb.BeneficiaryLive.Form do
   use RecordVerifierWeb, :live_view
   alias Phoenix.LiveView.ColocatedHook
-
+  alias Fluxon.Components.Button
   @impl true
   def render(assigns) do
     ~H"""
@@ -16,7 +16,7 @@ defmodule RecordVerifierWeb.BeneficiaryLive.Form do
         id="beneficiary-form"
         phx-change="validate"
         phx-submit="save"
-        class="max-w-5xl mx-auto"
+        class="container mx-auto max-w-5xl mt-2 grid gap-x-3 gap-y-2"
       >
         <%= if @form.source.type == :create do %>
           <.input field={@form[:committer]} type="text" label="Committer" /><.input
@@ -96,127 +96,147 @@ defmodule RecordVerifierWeb.BeneficiaryLive.Form do
           /><.input field={@form[:skills_needed]} type="checkbox" label="Skills needed" />
         <% end %>
         <%= if @form.source.type == :update do %>
-          <.input
-            field={@form[:first_name]}
-            type="text"
-            label="First name"
-          />
-          <.input
-            field={@form[:middle_name]}
-            type="text"
-            label="Middle name"
-          />
-          <.input
-            field={@form[:last_name]}
-            type="text"
-            label="Last name"
-          />
-          <.input
-            id="birth-date-input"
-            field={@form[:birth_date]}
-            type="date"
-            label="Birth date (MM/DD/YYYY)"
-            phx-hook=".CalculateAge"
-          />
-          <.input
-            field={@form[:barangay]}
-            type="select"
-            label="Barangay"
-            options={RecordVerifier.Enums.Barangay.values()}
-          />
-          <.input
-            field={@form[:city_or_municipality]}
-            type="select"
-            label="City or municipality"
-            options={RecordVerifier.Enums.CityOrMunicipality.values()}
-          />
-          <.input
-            field={@form[:province]}
-            type="text"
-            label="Province"
-          />
-          <.input
-            field={@form[:district]}
-            type="text"
-            label="District"
-          />
-          <.input
-            field={@form[:id_type]}
-            type="select"
-            label="Id type"
-            options={RecordVerifier.Enums.IdType.values()}
-          />
-          <.input
-            field={@form[:id_number]}
-            type="text"
-            label="Id number"
-          />
-          <.input
-            field={@form[:place_of_issue]}
-            type="text"
-            label="Place of issue"
-          />
-          <.input
-            field={@form[:contact_number]}
-            type="text"
-            label="Contact number"
-          />
-          <.input
-            field={@form[:beneficiary_type]}
-            type="select"
-            label="Beneficiary type"
-            options={RecordVerifier.Enums.BeneficiaryType.values()}
-          />
-          <.input
-            field={@form[:occupation]}
-            type="select"
-            label="Occupation"
-            options={RecordVerifier.Enums.Occupation.values()}
-          />
-          <.input
-            field={@form[:sex]}
-            type="select"
-            label="Sex"
-            options={RecordVerifier.Enums.Sex.values()}
-          />
-          <.input
-            field={@form[:civil_status]}
-            type="text"
-            label="Civil status"
-            options={RecordVerifier.Enums.CivilStatus.values()}
-          />
-          <.input
-            id="age-input"
-            field={@form[:age]}
-            type="number"
-            label="Age"
-            disabled
-            readonly
-          />
-          <.input
-            field={@form[:monthly_income]}
-            type="text"
-            label="Monthly income"
-          />
-          <.input
-            field={@form[:dependent]}
-            type="text"
-            label="Dependent"
-          />
-          <.input
-            field={@form[:interested]}
-            type="checkbox"
-            label="Interested"
-          />
-          <.input
-            field={@form[:skills_needed]}
-            type="checkbox"
-            label="Skills needed"
-          />
+          <div class="mb-4 col-span-4 border border-gray-300 p-4 rounded-lg grid grid-cols-4 gap-x-2">
+            <p class="col-span-4 text-lg -mt-10 bg-base-100 w-36 p-2">Personal details</p>
+            <.input
+              field={@form[:first_name]}
+              type="text"
+              label="First name"
+            />
+            <.input
+              field={@form[:middle_name]}
+              type="text"
+              label="Middle name"
+            />
+            <.input
+              field={@form[:last_name]}
+              type="text"
+              label="Last name"
+            />
+            <.input
+              field={@form[:sex]}
+              type="select"
+              label="Sex"
+              options={RecordVerifier.Enums.Sex.values()}
+            />
+          </div>
+          <div class="mb-4 col-span-4 border border-gray-300 p-4 rounded-lg grid grid-cols-4 gap-x-2">
+            <p class="col-span-4 text-lg -mt-10 bg-base-100 w-21 p-2">Address</p>
+            <.input
+              field={@form[:barangay]}
+              type="select"
+              label="Barangay"
+              options={RecordVerifier.Enums.Barangay.values()}
+            />
+            <.input
+              field={@form[:city_or_municipality]}
+              type="select"
+              label="City or municipality"
+              options={RecordVerifier.Enums.CityOrMunicipality.values()}
+            />
+            <.input
+              field={@form[:province]}
+              type="text"
+              label="Province"
+            />
+            <.input
+              field={@form[:district]}
+              type="text"
+              label="District"
+            />
+          </div>
+          <div class="mb-4 col-span-4 border border-gray-300 p-4 rounded-lg grid grid-cols-4 gap-x-2">
+            <p class="col-span-4 text-lg -mt-10 bg-base-100 w-8 p-2">ID</p>
+            <.input
+              field={@form[:id_type]}
+              type="select"
+              label="Id type"
+              options={RecordVerifier.Enums.IdType.values()}
+            />
+            <.input
+              field={@form[:id_number]}
+              type="text"
+              label="Id number"
+            />
+            <.input
+              field={@form[:place_of_issue]}
+              type="text"
+              label="Place of issue"
+            />
+            <.input
+              field={@form[:contact_number]}
+              type="text"
+              label="Contact number"
+            />
+          </div>
+          <div class="mb-4 col-span-4 border border-gray-300 p-4 rounded-lg grid grid-cols-4 gap-x-2">
+            <p class="col-span-4 text-lg -mt-10 bg-base-100 w-28 p-2">Occupation</p>
+            <.input
+              field={@form[:beneficiary_type]}
+              type="select"
+              label="Beneficiary type"
+              options={RecordVerifier.Enums.BeneficiaryType.values()}
+            />
+            <.input
+              field={@form[:occupation]}
+              type="select"
+              label="Occupation"
+              options={RecordVerifier.Enums.Occupation.values()}
+            />
+            <.input
+              field={@form[:monthly_income]}
+              type="text"
+              label="Monthly income"
+            />
+            <div class="flex flex-col justify-center items-start">
+              <.input
+                field={@form[:interested]}
+                type="checkbox"
+                label="Interested in wage/self-employment?"
+              />
+              <.input
+                field={@form[:skills_needed]}
+                type="checkbox"
+                label="Skills training needed?"
+              />
+            </div>
+          </div>
+          <div class="mb-4 col-span-4 border border-gray-300 p-4 rounded-lg grid grid-cols-4 gap-x-2">
+            <p class="col-span-4 text-lg -mt-10 bg-base-100 w-34 p-2">Further details</p>
+            <.input
+              id="birth-date-input"
+              field={@form[:birth_date]}
+              type="date"
+              label="Birth date (MM/DD/YYYY)"
+              phx-hook=".CalculateAge"
+            />
+            <.input
+              id="age-input"
+              field={@form[:age]}
+              type="number"
+              label="Age"
+              disabled
+              readonly
+            />
+            <.input
+              field={@form[:civil_status]}
+              type="text"
+              label="Civil status"
+              options={RecordVerifier.Enums.CivilStatus.values()}
+            />
+            <.input
+              field={@form[:dependent]}
+              type="text"
+              label="Dependent"
+            />
+          </div>
+          <div class="col-span-4 mx-auto flex gap-8"></div>
         <% end %>
 
-        <.button phx-disable-with="Saving..." variant="primary">Save Beneficiary</.button>
-        <.button navigate={return_path(@return_to, @beneficiary)}>Cancel</.button>
+        <div class="col-span-4 mx-auto flex gap-8">
+          <Button.button phx-disable-with="Saving..." variant="solid">Save Beneficiary</Button.button>
+          <Button.button navigate={return_path(@return_to, @beneficiary)}>Cancel</Button.button>
+        </div>
       </.form>
     </Layouts.app>
     <script :type={ColocatedHook} name=".CalculateAge">

@@ -14,7 +14,7 @@ defmodule RecordVerifierWeb.BeneficiaryLive.Index do
         </:actions>
       </.header>
 
-      <.table
+      <RecordVerifierWeb.CoreComponents.table
         id="beneficiaries"
         rows={@streams.beneficiaries}
         row_click={fn {_id, beneficiary} -> JS.navigate(~p"/beneficiaries/#{beneficiary}") end}
@@ -37,7 +37,7 @@ defmodule RecordVerifierWeb.BeneficiaryLive.Index do
             Delete
           </.link>
         </:action>
-      </.table>
+      </RecordVerifierWeb.CoreComponents.table>
     </Layouts.app>
     """
   end

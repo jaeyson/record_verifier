@@ -198,6 +198,11 @@ defmodule RecordVerifier.Accounts.Beneficiary do
     timestamps()
   end
 
+  aggregates do
+    count :total_beneficiary_count, :id do
+    end
+  end
+
   # calculations do
   #   calculate :duration, :string, Tunez.Music.Calculations.SecondsToMinutes
 
