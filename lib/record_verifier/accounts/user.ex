@@ -34,6 +34,7 @@ defmodule RecordVerifier.Accounts.User do
     strategies do
       password :password do
         identity_field :email
+        # registration_enabled? false
         hash_provider AshAuthentication.BcryptProvider
 
         resettable do

@@ -48,7 +48,7 @@ defmodule RecordVerifier.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       {:error_tracker, "~> 0.7"},
       {:live_debugger, "~> 0.5", only: [:dev]},
-      {:ash_admin, "~> 0.13"},
+      {:ash_admin, "~> 1.1"},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:picosat_elixir, "~> 0.2"},
       {:ash_authentication, "~> 4.0"},
@@ -83,7 +83,7 @@ defmodule RecordVerifier.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:fluxon, "~> 2.0.0", repo: :fluxon}
+      {:fluxon, "~> 2.3", repo: :fluxon}
     ]
   end
 
