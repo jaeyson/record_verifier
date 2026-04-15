@@ -8,6 +8,7 @@
 @source "../js";
 @source "../../lib/record_verifier_web";
 @source "../../deps/fluxon/**/*.*ex";
+@source "../../vendor/fluxon/lib/**/*.ex";
 @import "../../deps/fluxon/priv/static/theme";
 
 /* A Tailwind plugin that makes "hero-#{ICON}" classes available.
