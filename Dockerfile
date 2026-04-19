@@ -37,6 +37,13 @@ ENV MIX_ENV="prod"
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
+
+ARG FLUXON_LICENSE_KEY X_AUTH_TOKEN SECRET_KEY_BASE DATABASE_URL TOKEN_SIGNING_SECRET
+
+RUN mix hex.repo add fluxon https://repo.fluxonui.com \
+  --fetch-public-key SHA256:zF8zWamOWgokeJdiIYgRl91ZBmQYnyXlxIOp3ralbos \
+  --auth-key ${FLUXON_LICENSE_KEY}
+
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
 
