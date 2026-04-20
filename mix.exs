@@ -41,10 +41,14 @@ defmodule RecordVerifier.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:cinder, "~> 0.9"},
+      {:ex_money_sql, "~> 1.0"},
+      {:ex_cldr, "~> 2.0"},
+      {:ash_money, "~> 0.2"},
       {:bcrypt_elixir, "~> 3.0"},
       {:error_tracker, "~> 0.7"},
       {:live_debugger, "~> 0.5", only: [:dev]},
-      {:ash_admin, "~> 0.13"},
+      {:ash_admin, "~> 1.1"},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:picosat_elixir, "~> 0.2"},
       {:ash_authentication, "~> 4.0"},
@@ -78,7 +82,8 @@ defmodule RecordVerifier.MixProject do
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:fluxon, "~> 2.3", repo: :fluxon}
     ]
   end
 

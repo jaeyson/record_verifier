@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :cinder, default_theme: "modern"
+config :ex_cldr, default_backend: RecordVerifier.Cldr
 config :error_tracker, repo: RecordVerifier.Repo, otp_app: :record_verifier, enabled: true
 
 config :ash,
@@ -20,7 +22,8 @@ config :ash,
   read_action_after_action_hooks_in_order?: true,
   bulk_actions_default_to_errors?: true,
   transaction_rollback_on_error?: true,
-  known_types: [AshPostgres.Timestamptz, AshPostgres.TimestamptzUsec]
+  known_types: [AshPostgres.Timestamptz, AshPostgres.TimestamptzUsec, AshMoney.Types.Money],
+  custom_types: [money: AshMoney.Types.Money]
 
 config :spark,
   formatter: [
@@ -80,7 +83,7 @@ config :record_verifier, RecordVerifier.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
-  version: "0.25.4",
+  version: "0.28.0",
   record_verifier: [
     args:
       ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets/js --external:/fonts/* --external:/images/* --alias:@=.),
@@ -90,7 +93,7 @@ config :esbuild,
 
 # Configure tailwind (the version is required)
 config :tailwind,
-  version: "4.1.12",
+  version: "4.2.2",
   record_verifier: [
     args: ~w(
       --input=assets/css/app.css

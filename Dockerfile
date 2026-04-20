@@ -7,13 +7,13 @@
 # This file is based on these images:
 #
 #   - https://hub.docker.com/r/hexpm/elixir/tags - for the build image
-#   - https://hub.docker.com/_/debian/tags?name=trixie-20260202-slim - for the release image
+#   - https://hub.docker.com/_/debian/tags?name=trixie-20260406-slim - for the release image
 #   - https://pkgs.org/ - resource for finding needed packages
-#   - Ex: docker.io/hexpm/elixir:1.19.5-erlang-28.3.1-debian-trixie-20260202-slim
+#   - Ex: docker.io/hexpm/elixir:1.19.5-erlang-28.3.1-debian-trixie-20260406-slim
 #
 ARG ELIXIR_VERSION=1.19.5
 ARG OTP_VERSION=28.3.1
-ARG DEBIAN_VERSION=trixie-20260202-slim
+ARG DEBIAN_VERSION=trixie-20260406-slim
 
 ARG BUILDER_IMAGE="docker.io/hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
 ARG RUNNER_IMAGE="docker.io/debian:${DEBIAN_VERSION}"
@@ -37,6 +37,15 @@ ENV MIX_ENV="prod"
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
+
+# ARG FLUXON_LICENSE_KEY X_AUTH_TOKEN SECRET_KEY_BASE DATABASE_URL TOKEN_SIGNING_SECRET
+ARG FLUXON_LICENSE_KEY
+
+RUN --mount=type=secret,id=FLUXON_LICENSE_KEY \
+    mix hex.repo add fluxon https://repo.fluxonui.com \
+    --fetch-public-key SHA256:zF8zWamOWgokeJdiIYgRl91ZBmQYnyXlxIOp3ralbos \
+    --auth-key $(cat /run/secrets/FLUXON_LICENSE_KEY)
+
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
 

@@ -84,6 +84,8 @@ defmodule RecordVerifierWeb do
 
       # HTML escaping functionality
       import Phoenix.HTML
+      # use Fluxon, except: [:button, :error, :input, :table]
+      use Fluxon, except: [:button, :input]
       # Core UI components
       import RecordVerifierWeb.CoreComponents
 
