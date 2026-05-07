@@ -32,11 +32,19 @@ defmodule RecordVerifierWeb.Router do
     pipe_through :browser
 
     ash_authentication_live_session :auth_optional,
-      # on_mount: {NappyWeb.LiveUserAuth, :live_user_required} do
       on_mount: {RecordVerifierWeb.LiveUserAuth, :live_user_optional} do
+      get "/", PageController, :home
+    end
+
+    ash_authentication_live_session :auth_required,
+      on_mount: {RecordVerifierWeb.LiveUserAuth, :live_user_required} do
+      # live "/beneficiaries", BeneficiaryLive.Index, :index
       live "/beneficiaries", InvoiceManagementLive.Index, :index
       live "/list", Beneficiaries.IndexLive
-      # live "/beneficiaries", BeneficiaryLive.Index, :index
+    end
+
+    ash_authentication_live_session :admin_required,
+      on_mount: {RecordVerifierWeb.LiveUserAuth, :live_admin_required} do
       live "/beneficiaries/new", BeneficiaryLive.Form, :new
       live "/beneficiaries/:id/edit", BeneficiaryLive.Form, :edit
 
@@ -61,7 +69,6 @@ defmodule RecordVerifierWeb.Router do
   scope "/", RecordVerifierWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
     auth_routes AuthController, RecordVerifier.Accounts.User, path: "/auth"
     sign_out_route AuthController
 

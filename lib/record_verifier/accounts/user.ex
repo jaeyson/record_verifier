@@ -229,6 +229,19 @@ defmodule RecordVerifier.Accounts.User do
     bypass AshAuthentication.Checks.AshAuthenticationInteraction do
       authorize_if always()
     end
+
+    policy action(:get_by_email) do
+      authorize_if expr(id == ^actor(:id))
+      authorize_if actor_attribute_equals(:role, :admin)
+    end
+
+    policy action(:read) do
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy always() do
+      forbid_if always()
+    end
   end
 
   attributes do
@@ -242,6 +255,11 @@ defmodule RecordVerifier.Accounts.User do
     attribute :hashed_password, :string do
       allow_nil? false
       sensitive? true
+    end
+
+    attribute :role, RecordVerifier.Accounts.Role do
+      allow_nil? false
+      default :user
     end
 
     attribute :confirmed_at, :utc_datetime_usec

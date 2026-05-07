@@ -13,6 +13,24 @@ defmodule RecordVerifierWeb.LiveUserAuth do
     {:cont, AshAuthentication.Phoenix.LiveSession.assign_new_resources(socket, session)}
   end
 
+  def on_mount(:live_admin_required, _params, _session, socket) do
+    current_user = socket.assigns[:current_user]
+
+    if current_user && current_user.role == :admin do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(
+          :error,
+          "Unauthorized. Only admins can use certain operations. Kindly seek admin assistance."
+        )
+        |> Phoenix.LiveView.redirect(to: ~p"/")
+
+      {:halt, socket}
+    end
+  end
+
   def on_mount(:live_user_optional, _params, _session, socket) do
     if socket.assigns[:current_user] do
       {:cont, socket}
