@@ -29,7 +29,7 @@ if config_env() == :prod do
   config :record_verifier, RecordVerifier.Mailer,
     adapter: Swoosh.Adapters.Mailjet,
     api_key: System.get_env("MAILJET_API_KEY"),
-    secret: System.get("MAILJET_SECRET_KEY")
+    secret: System.get_env("MAILJET_SECRET_KEY")
 
   database_url =
     System.get_env("DATABASE_URL") ||
