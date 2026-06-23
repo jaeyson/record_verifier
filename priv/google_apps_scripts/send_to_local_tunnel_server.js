@@ -111,7 +111,8 @@ function sendToLocalTunnelServer() {
     return obj;
   });
 
-  const url = "https://jaeysons-macbook-air.tail568508.ts.net/verify";
+  // const url = "https://jaeysons-macbook-air.tail568508.ts.net/verify"; // for local app
+  const url = "https://record-verifier.fly.dev/verify"; // for fly.io app (production)
   const options = {
     method: "post",
     contentType: "application/json",
