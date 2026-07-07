@@ -50,16 +50,6 @@ defmodule RecordVerifierWeb.Router do
 
       live "/beneficiaries/:id", BeneficiaryLive.Show, :show
       live "/beneficiaries/:id/show/edit", BeneficiaryLive.Show, :edit
-
-      scope "/admin" do
-        import AshAdmin.Router
-        ash_admin "/"
-      end
-
-      scope "/admin/errors" do
-        use ErrorTracker.Web, :router
-        error_tracker_dashboard "/errors"
-      end
     end
 
     # ash_authentication_live_session :authenticated_routes do
@@ -139,6 +129,22 @@ defmodule RecordVerifierWeb.Router do
     end
   end
 
+  # admin production page
+  scope "/admin", RecordVerifierWeb do
+    pipe_through [:browser, :require_admin]
+
+    import AshAdmin.Router
+    ash_admin "/"
+  end
+
+  scope "/admin/errors", RecordVerifierWeb do
+    pipe_through [:browser, :require_admin]
+
+    use ErrorTracker.Web, :router
+    error_tracker_dashboard "/errors"
+  end
+
+  # admin localhost page
   if Application.compile_env(:record_verifier, :dev_routes) do
     import AshAdmin.Router
 
