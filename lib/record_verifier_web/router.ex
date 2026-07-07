@@ -52,7 +52,12 @@ defmodule RecordVerifierWeb.Router do
       live "/beneficiaries/:id/show/edit", BeneficiaryLive.Show, :edit
 
       scope "/admin" do
+        import AshAdmin.Router
         ash_admin "/"
+      end
+
+      scope "/admin/errors" do
+        use ErrorTracker.Web, :router
         error_tracker_dashboard "/errors"
       end
     end
