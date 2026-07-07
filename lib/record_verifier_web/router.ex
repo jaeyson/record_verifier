@@ -50,6 +50,11 @@ defmodule RecordVerifierWeb.Router do
 
       live "/beneficiaries/:id", BeneficiaryLive.Show, :show
       live "/beneficiaries/:id/show/edit", BeneficiaryLive.Show, :edit
+
+      scope "/admin" do
+        ash_admin "/"
+        error_tracker_dashboard "/errors"
+      end
     end
 
     # ash_authentication_live_session :authenticated_routes do

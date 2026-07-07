@@ -9,6 +9,14 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+## Google apps script
+
+Please refer `priv/google_apps_scripts/send_to_local_tunnel_server.js` and do the following:
+1. Adding `X_AUTH_TOKEN` in Google Apps Script
+2. Go to: Project settings -> Script Properties
+3. property name: `X_AUTH_TOKEN`
+4. property value: `<PUT YOUR X_AUTH_TOKEN VALUE HERE>`
+
 ## Build web server
 
 ```bash
