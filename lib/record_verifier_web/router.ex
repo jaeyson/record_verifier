@@ -134,38 +134,46 @@ defmodule RecordVerifierWeb.Router do
   end
 
   # admin production page
-  scope "/admin", RecordVerifierWeb do
-    pipe_through [:browser, :require_admin]
+  scope "/admin", as: :admin do
+    if Application.compile_env(:record_verifier, :dev_routes) do
+      pipe_through :browser
+    else
+      pipe_through [:browser, :require_admin]
+    end
 
     import AshAdmin.Router
     ash_admin "/"
   end
 
-  scope "/admin/errors", RecordVerifierWeb do
-    pipe_through [:browser, :require_admin]
+  scope "/admin/errors", as: :admin_errors do
+    if Application.compile_env(:record_verifier, :dev_routes) do
+      pipe_through :browser
+    else
+      pipe_through [:browser, :require_admin]
+    end
 
     use ErrorTracker.Web, :router
     error_tracker_dashboard "/errors"
   end
 
   # admin localhost page
-  if Application.compile_env(:record_verifier, :dev_routes) do
-    import AshAdmin.Router
+  # if Application.compile_env(:record_verifier, :dev_routes) do
+  #   import AshAdmin.Router
 
-    scope "/admin" do
-      pipe_through :browser
+  #   scope "/admin" do
+  #     pipe_through :browser
 
-      ash_admin "/"
-    end
-  end
+  #     ash_admin "/"
+  #   end
+  # end
 
-  if Application.compile_env(:record_verifier, :dev_routes) do
-    use ErrorTracker.Web, :router
+  # if Application.compile_env(:record_verifier, :dev_routes) do
+  #   use ErrorTracker.Web, :router
 
-    scope "/dev" do
-      pipe_through :browser
+  #   scope "/dev" do
+  #     pipe_through :browser
 
-      error_tracker_dashboard "/errors"
-    end
-  end
+  #     error_tracker_dashboard "/errors"
+  #   end
+  # end
 end
