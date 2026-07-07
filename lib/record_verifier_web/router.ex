@@ -15,6 +15,10 @@ defmodule RecordVerifierWeb.Router do
     plug :load_from_session
   end
 
+  pipeline :require_admin do
+    plug RecordVerifierWeb.Plugs.RequireAdmin
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
     plug :load_from_bearer
