@@ -145,7 +145,7 @@ defmodule RecordVerifierWeb.Router do
     ash_admin "/"
   end
 
-  scope "/admin/errors", as: :admin_errors do
+  scope "/errors", as: :admin_errors do
     if Application.compile_env(:record_verifier, :dev_routes) do
       pipe_through :browser
     else
@@ -153,7 +153,7 @@ defmodule RecordVerifierWeb.Router do
     end
 
     use ErrorTracker.Web, :router
-    error_tracker_dashboard "/errors"
+    error_tracker_dashboard "/"
   end
 
   # admin localhost page
